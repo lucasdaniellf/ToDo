@@ -1,6 +1,8 @@
-﻿using TaskManager.Model.ToDo;
+﻿using Microsoft.AspNetCore.SignalR;
+using TaskManager.Model.ToDo;
 using TaskManager.Repository.Interface;
 using TaskManager.Services.DTO;
+using TaskManager.Services.Hubs;
 using TaskManager.UnitOfWork;
 
 namespace TaskManager.Services
@@ -9,8 +11,10 @@ namespace TaskManager.Services
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IRepository<ToDo> _repository;
-        public ToDoService(IRepository<ToDo> repository, IUnitOfWork unitOfWork)
+        private readonly IHubContext<ToDoHub, IToDoHub> _context;
+        public ToDoService(IRepository<ToDo> repository, IUnitOfWork unitOfWork, IHubContext<ToDoHub, IToDoHub> context)
         {
+            _context = context;
             _repository = repository;
             _unitOfWork = unitOfWork;
         }
@@ -43,6 +47,11 @@ namespace TaskManager.Services
                 ToDo todo = toDos.First();
                 todo.DeleteToDo();
                 rows = await _repository.DeleteAsync(todo, token);
+
+                if(rows > 0)
+                {
+                    await _context.Clients.Groups("ToDo").NotifyToDoDeleted(todo);
+                }
             }
 
             //SendCommands
@@ -55,13 +64,16 @@ namespace TaskManager.Services
             _unitOfWork.Begin();
             int id = await _repository.InsertAsync(MapMutateToDo(dto), token);
 
-            IEnumerable<QueryToDo> newToDo = (from todo in await _repository.GetByIdAsync(id, token)
-                                             select MapQueryToDo(todo)).ToList();
+            IEnumerable<ToDo> newToDo = (from todo in await _repository.GetByIdAsync(id, token)
+                                             select todo).ToList();
 
-
+            if (newToDo.Any())
+            {
+                await _context.Clients.Groups("ToDo").NotifyToDoCreated(newToDo.First());
+            }
             //SendCommands
-
-            return newToDo;
+            
+            return newToDo.Select(x => MapQueryToDo(x)); ;
         }
 
         public async Task<bool> ChangeStatusToDo(int id, CancellationToken token)
@@ -75,6 +87,11 @@ namespace TaskManager.Services
                 ToDo todo = toDos.First();
                 todo.ChangeToDoStatus();
                 row = await _repository.UpdateAsync(todo, token);
+
+                if(row > 0)
+                {
+                    await _context.Clients.Groups("ToDo").NotifyStatusChanged(todo);
+                }
             }
 
             return row > 0;
@@ -92,6 +109,11 @@ namespace TaskManager.Services
                 todo.UpdateTitle(dto.Title);
                 todo.UpdateDescription(dto.Description);
                 row = await _repository.UpdateAsync(todo, token);
+
+                if (row > 0)
+                {
+                    await _context.Clients.Groups("ToDo").NotifyToDoUpdated(todo);
+                }
             }
             return row > 0;
         }

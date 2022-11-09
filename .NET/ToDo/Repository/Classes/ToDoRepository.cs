@@ -14,9 +14,9 @@ namespace TaskManager.Repository.Classes
 
         public async Task<int> DeleteAsync(ToDo todo, CancellationToken token)
         {
-            var sql = @"update ToDo set isActive = 0 where Id = @ID";
+            var sql = @"update ToDo set isActive = 0 where Id = @Id";
             int rows = await _context.Connection.ExecuteAsync(new CommandDefinition(commandText: sql, 
-                                                                                      parameters: todo, 
+                                                                                      parameters: new { todo.Id }, 
                                                                                       transaction: _context.Transaction, 
                                                                                       commandType: System.Data.CommandType.Text, 
                                                                                       cancellationToken: token));
@@ -48,7 +48,7 @@ namespace TaskManager.Repository.Classes
         {
             var sql = @"insert into ToDo(Title, Description, IsDone, IsActive) values (@Title, @Description, 0, 1) RETURNING Id";
             int rows = await _context.Connection.ExecuteScalarAsync<int>(new CommandDefinition(commandText: sql,
-                                                                                      parameters: new { Title = toDo.Title, Description = toDo.Description } ,
+                                                                                      parameters: new { toDo.Title, toDo.Description } ,
                                                                                       transaction: _context.Transaction,
                                                                                       commandType: System.Data.CommandType.Text,
                                                                                       cancellationToken: token));

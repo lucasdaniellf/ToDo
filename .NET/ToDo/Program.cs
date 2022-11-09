@@ -3,6 +3,7 @@ using TaskManager.Repository;
 using TaskManager.Repository.Classes;
 using TaskManager.Repository.Interface;
 using TaskManager.Services;
+using TaskManager.Services.Hubs;
 using TaskManager.UnitOfWork;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -13,8 +14,17 @@ builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<IRepository<ToDo>, ToDoRepository>();
 builder.Services.AddScoped<ToDoService>();
 
+string policy = "MyPolicy";
+builder.Services.AddCors(opt =>
+{
+    opt.AddPolicy(policy, p =>
+    {
+        p.AllowCredentials();
+    });
+});
+
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+builder.Services.AddSignalR();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
@@ -27,10 +37,14 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseHttpsRedirection();
-
+app.UseRouting();
 app.UseAuthorization();
 
 app.MapControllers();
+app.UseCors(policy);
 
+app.UseEndpoints(endpoint =>
+{
+    endpoint.MapHub<ToDoHub>("/hub/todo");
+});
 app.Run();

@@ -21,7 +21,7 @@
             return toDo;
         }
 
-        public void ChangeToDoStatus() //OrChangeToDoStatus
+        public void ChangeToDoStatus()
         {
             IsDone = IsDone == Status.TRUE ? Status.FALSE : Status.TRUE;
         }
