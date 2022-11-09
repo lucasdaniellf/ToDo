@@ -75,7 +75,7 @@ namespace TaskManager.Controllers
             return BadRequest();
         }
 
-        [HttpPut("status/{id}")]
+        [HttpPut("{id}/status")]
         public async Task<ActionResult> ChangeStatusToDo(int id, CancellationToken token)
         {
             if (ModelState.IsValid)
