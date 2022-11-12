@@ -13,6 +13,5 @@ good guide for the methods that should be implemented in the service class (not 
 The methods on this service class notify all users connected to this API through a SignalR hub. Also, worth mentioning that the application uses a sqlite database
 that gets checked everytime a connection to the database is requested.
 
-For the frontend application, a simple SPA using react, which has two sections: A completed tasks section and a to be finised task section. The application 
-fetches data from the API and also listen to events in the SignalR hub. The hub notifies whenever a ToDo is created, updated, deleted or completed, and the application
-fetches data and rerender the page everytime this happens.
+For the frontend application, a simple SPA using React, which has two sections: A completed tasks section and a to be finised task section. The application 
+fetches data from the API and also listen to events in the SignalR hub. The hub notifies whenever a ToDo is created, updated, deleted or completed, and the application fetches data and rerender the page everytime this happens.
