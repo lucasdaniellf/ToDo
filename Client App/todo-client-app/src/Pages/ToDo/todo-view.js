@@ -16,7 +16,6 @@ export const TodoPage = () => {
     const changeTodoStatus = useCallback((id) => {
         apiClient.updateTodoStatus(id).then(
             () => {
-                console.log("this right here")
                 hub.connection.invoke("NotifyStatusChanged", parseInt(id))
             })
     },[apiClient, hub])
@@ -31,7 +30,6 @@ export const TodoPage = () => {
                 
                 setFinishedTodos(todoList.filter((x) => x.isDone === 1))
                 setUnfinishedTodos(todoList.filter((x) => x.isDone === 0))
-                console.log(todoList)
             } catch(error){
                 if (error.name === 'AbortError') return;
                 console.log("error "+ error) 
