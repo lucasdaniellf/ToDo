@@ -1,0 +1,26 @@
+.grid{
+    padding-inline: 10px;
+    padding-block: 10px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    align-content: flex-start;
+    align-items: flex-start;
+}
+.card{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+
+    border-radius: 10px;
+    background-color:rgb(101, 181, 184);
+    
+    max-width: 200px;
+    min-width: 200px;
+
+    max-height: 250px;
+    min-height: 250px;
+
+    margin: 10px;
+    padding: 10px;
+}

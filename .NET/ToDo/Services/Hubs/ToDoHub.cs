@@ -21,9 +21,9 @@ namespace TaskManager.Services.Hubs
             return base.OnDisconnectedAsync(exception);
         }
         
-        public async Task NotifyStatusChanged(ToDo t)
+        public async Task NotifyStatusChanged(int id)
         {
-            await Clients.Group("ToDo").NotifyStatusChanged(t);
+            await Clients.Group("ToDo").NotifyStatusChanged(id);
 
             //Outra possibilidade:
             //await Clients.OthersInGroup("ToDo").SendAsync(nameof(NotifyStatusChanged), id);

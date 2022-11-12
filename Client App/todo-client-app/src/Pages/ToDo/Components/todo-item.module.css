@@ -1,0 +1,24 @@
+.button{
+    margin-top: 10px;
+    margin-bottom: 10px;
+    width: 100%;
+    padding: 5px;
+    font-size: medium;
+    font-weight: bold;
+    background-color: rgb(231, 207, 176);
+    color: rgb(101, 181, 184);
+}
+
+.myDiv{
+    color:rgb(231, 207, 176);
+    font-family: 'Calibri';
+    text-align: center;
+}
+
+.myDiv p{
+    text-align: justify;
+    padding-inline: 5px;
+    font-size: large;
+
+}
+

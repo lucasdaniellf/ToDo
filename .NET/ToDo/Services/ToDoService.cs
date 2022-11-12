@@ -90,7 +90,7 @@ namespace TaskManager.Services
 
                 if(row > 0)
                 {
-                    await _context.Clients.Groups("ToDo").NotifyStatusChanged(todo);
+                    await _context.Clients.Groups("ToDo").NotifyStatusChanged(todo.Id);
                 }
             }
 
