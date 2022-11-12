@@ -1,0 +1,13 @@
+.todoSection {
+    margin:1%;
+    padding: 2%;
+    border-radius: 20px;
+    background-color: rgb(231, 207, 176);
+}
+
+.todoSectionTitle{
+    text-align: center;
+    font-size: 2em;
+    font-family: 'Calibri';
+    color:  rgb(101, 181, 184);
+}
